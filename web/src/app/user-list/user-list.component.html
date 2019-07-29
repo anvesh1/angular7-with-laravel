@@ -1,0 +1,210 @@
+<div class="wrapper">
+
+  <app-header></app-header>
+
+  <app-sidebar></app-sidebar>
+
+  <div class="content-wrapper" style="min-height: 720px;" [hidden]="displayList" >
+    <section class="content-header">
+      <h1 style="display:inline;">
+        User List
+        <br><small></small>
+      </h1>
+      <!-- <button [routerLink]="['/emp-details']" class="btn btn-info pull-right" style="margin-top:-20px;">+ Create Employee</button> -->
+      <section class="content">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <div class="box-body table-responsive">
+
+                <div class="col-md-12" style="margin-bottom:10px;">
+                  <!--
+                  <div class=" col-md-6 input-group input-group-sm pull-left" style="margin-left:15px;">
+                    <input type="text" class="form-control pull-right" placeholder="Search By Employee Name"  [(ngModel)]="searchFields['first_name']" style="height: 33px;"name="searchFields">
+                    <div class="input-group-btn">
+                      <button class="btn btn-success btn-flat" style="height: 34px !important;margin-left: 3px" title="search" (click)="getSearchRequest()">
+                        <i class="fa fa-search"></i></button>
+                      <button class="btn btn-primary btn-flat" style="height: 34px !important;margin-left: 3px" title="reset" (click)="resetSearchField()">
+                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-1" ><i class="fa fa-spinner fa-spin fa-2x" *ngIf="spinLoader.filter"></i></div>
+                  -->
+                  <div class=" col-md-6">&nbsp;</div>
+                  <div class=" col-md-1">&nbsp;</div>
+
+                  <div class="col-md-3 total-record"><b>Total: {{totaluser}}</b></div>
+                  <div class="col-md-2 pull-right">
+                    <div class="pull-right" style="margin-right: 10px;" *ngIf="isOnePage">
+                      <table class="">
+                        <colgroup>
+                          <col style="width: 45%;">
+                        </colgroup>
+                        <tbody><tr>
+                          <td>
+                            <a class="btn-color pointer" (click)="previousPage()">
+                              <i class="fa fa-backward" title="Previous"></i>
+                            </a>
+                            <span style="margin-left: 25% ! important;"></span>
+                            <a class="btn-color pointer">
+                              <i class="fa fa-forward" title="Next" (click)="nextPage()"></i>
+                            </a>
+                          </td>
+                          <td>
+                            <select class="form-control"
+                                    id="pagination"
+                                    name="pagination"
+                                    [(ngModel)]="currentPage"
+                                    (change)="changePage()">
+                              <option *ngFor="let item of pages" [value]="item">{{item}}</option>
+                            </select>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <table class="table table-hover">
+                  <tr>
+                    <th *ngFor = "let field of fields;index as i" [ngStyle]="{'width':field.width}">
+                      <span *ngIf="field.sort">{{field.title}}</span> &nbsp;
+                      <a class="pointer" *ngIf="field.sort">
+                        <i class="fa fa-sort" id="fa-{{field.field}}" (click)="sortBy(field.field, $event)"></i>
+                      </a>
+                      <span *ngIf="!field.sort">{{field.title}}</span>
+                    </th>
+                    <th>
+                      Action
+                    </th>
+                    <!--
+                    <th>
+                      Active
+                    </th>
+                    -->
+                  </tr>
+                  <ng-template ngFor let-i="index" let-userData [ngForOf]="listData" >
+                    <tr>
+
+                      <td>&nbsp;&nbsp;<span >{{userData['first_name']}}</span></td>
+                      <td>&nbsp;&nbsp;<span >{{userData['last_name']}}</span></td>
+                      <td>&nbsp;&nbsp;<span>{{userData['email_id']}}</span></td>
+                      <td>&nbsp;&nbsp;<span>{{userData['contact_no']}}</span></td>
+                      <td>
+                        <button class="btn btn-danger btn-sm" (click)="deleteUser(userData['id'])" title="Delete">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                        <i *ngIf="spinLoader.delete[userData['id']]" class="fa fa-spinner fa-spin fa-2x"></i>
+                      </td>
+                      <!--
+                      <td >
+                        <ui-switch id="userId" [checked]="userData['status']==1 ? true : false" size="small" title="User Status" (change)="userIsActive(userData['id'],userData['email_id'],$event)" ></ui-switch>
+                      </td>
+                      <td >
+                        <a (click)="Show(userData)"   title="View"class="btn btn-info"><i class="fa fa-eye"></i></a>
+                      </td>
+                      -->
+                    </tr>
+                  </ng-template>
+                  <tr *ngIf="isListData">
+                    <td colspan="6" style="text-align: center">
+                      <i class="fa fa-spinner fa-spin fa-2x" ></i>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!listData.length">
+                    <td colspan="5" align="center">No data found.</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </div>
+
+  <!--
+  <div class="content-wrapper" style="min-height: 720px;" [hidden]="!displayList">
+    <section class="content-header">
+      <h1>
+        User {{userData.first_name}}
+        <br><small>User details</small>
+      </h1>
+      <section class="content">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <div class="box-header">
+                <div class="box-tools">
+                </div>
+              </div>
+              <div class="box-body no-padding">
+                <div class="col-md-12">
+                  <a (click)="back()" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</a>
+                </div>
+                <div class="col-md-12" style="margin-top: 12px;">
+                  <div class="box box-primary">
+                    <div class="box-header with-border">
+                      <h3 class="box-title">Employee View</h3>
+                    </div>
+                    <form role="form">
+                      <div class="box-body body-border">
+                        <div class="col-md-12">
+                          <div class="col-md-6 pull-right" style="margin-top: 14px;">
+                            <img style="height:280px;" src="{{apiBaseUrl}}{{userData.user_profile_image}}"  class="img-circle center" >
+                          </div>
+                          <div class="col-md-6">
+
+                            <div class="form-group">
+                              <label for="client_name">Employee Name </label>
+                              <input type="text" class="form-control" id="client_name" value="{{userData.first_name}}" readonly >
+                            </div>
+
+                            <div class="form-group">
+                              <label for="email_id">Email Id </label>
+                              <input type="text" class="form-control" id="email_id" value="{{userData.email_id}}"  readonly >
+                            </div>
+
+                            <div class="form-group">
+                              <label for="mobile">Mobile</label>
+                              <input type="text" class="form-control" id="mobile" value="{{userData.contact_no}}" readonly  >
+                            </div>
+
+                            <div class="form-group">
+                              <label for="address">Address</label>
+                              <input type="text" class="form-control" id="address" value="{{userData.address}}" readonly >
+                            </div>
+
+                            <div class="form-group">
+                              <label for="device_type">Device Type</label>
+                              <input type="text" class="form-control" id="device_type" value="{{userData.device_type}}" readonly >
+
+                            </div>
+
+                            <div class="form-group">
+                              <label for="id_number">ID Number</label>
+                              <input type="text" class="form-control" id="id_number" value="{{userData.id_number}}" readonly >
+                            </div>
+                            <div class="form-group">
+                              <label for="vat_number">Designation</label>
+                              <input type="text" class="form-control" id="vat_number" value="{{userData.designation}}" readonly >
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </div>
+  -->
+  <app-footer></app-footer>
+</div>
